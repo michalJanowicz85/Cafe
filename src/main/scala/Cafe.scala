@@ -24,6 +24,27 @@
 //• When purchased items include any hot food apply a service charge of 20% to
 //the total bill with a maximum £20 service charge
 
-class Cafe {
+// 1. Data structure:
 
+sealed trait CafeItem {
+  def price: BigDecimal
+}
+
+case object Cola extends CafeItem {
+  override def price: BigDecimal = 0.50
+}
+case object Coffee extends CafeItem {
+  override def price: BigDecimal = 1.0
+}
+case object CheeseSandwich extends CafeItem {
+  override def price: BigDecimal = 2.0
+}
+case object SteakSandwich extends CafeItem {
+  override def price: BigDecimal = 4.50
+}
+
+
+object Cafe {
+
+  def totalBill(items: List[CafeItem]): BigDecimal = items.map(_.price).sum
 }
