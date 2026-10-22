@@ -8,5 +8,9 @@ class CafeSpec extends AnyWordSpec with Matchers {
       Cafe.totalBill(List(Cola, Cola, CheeseSandwich)) shouldBe 3 // 0.5 + 0.5 + 2.0 = 3
       Cafe.totalBill(List(Coffee, SteakSandwich)) shouldBe 5.5   // 2 + 4.5 == 6.5
     }
+    "will not add service charge if only drinks ordered" in {
+      Cafe.totalBill(List(Cola,Cola)) shouldBe 1
+      Cafe.totalBill(List(Cola,Coffee)) shouldBe 1.5
+    }
   }
 }

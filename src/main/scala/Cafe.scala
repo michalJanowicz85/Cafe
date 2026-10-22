@@ -30,17 +30,25 @@ sealed trait CafeItem {
   def price: BigDecimal
 }
 
-case object Cola extends CafeItem {
+sealed trait Drink extends CafeItem
+sealed trait Food extends  CafeItem {
+  def isHot: Boolean
+}
+
+case object Cola extends Drink {
   override def price: BigDecimal = 0.50
 }
-case object Coffee extends CafeItem {
+case object Coffee extends Drink {
   override def price: BigDecimal = 1.0
 }
-case object CheeseSandwich extends CafeItem {
+case object CheeseSandwich extends Food {
   override def price: BigDecimal = 2.0
+  override def isHot: Boolean = false
 }
-case object SteakSandwich extends CafeItem {
+
+case object SteakSandwich extends Food {
   override def price: BigDecimal = 4.50
+  override def isHot: Boolean = true
 }
 
 
