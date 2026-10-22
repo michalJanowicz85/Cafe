@@ -20,10 +20,8 @@ import scala.math.BigDecimal.RoundingMode
 //Step 2: Service Charge
 //  Add support for a service charge:
 //• When all purchased items are drinks no service charge is applied
-//• When purchased items include any food apply a service charge of 10% to the
-//  total bill (rounded to 2 decimal places)
-//• When purchased items include any hot food apply a service charge of 20% to
-//the total bill with a maximum £20 service charge
+//• When purchased items include any food apply a service charge of 10% to the total bill (rounded to 2 decimal places)
+//• When purchased items include any hot food apply a service charge of 20% to the total bill with a maximum £20 service charge
 
 // 1. Data structure:
 
@@ -70,14 +68,28 @@ object Cafe {
         case _ => false
       }
 
-    val serviceCharge = {
-      val noCap = {
-        if (hotFoodIncluded) itemsPrice * 0.20
-        else if (foodIncluded) itemsPrice * 0.10
-        else BigDecimal(0)
+    val serviceCharge =
+      if (hotFoodIncluded) {
+        val charge = itemsPrice * 0.20
+        if (charge > BigDecimal(20))
+          BigDecimal(20)
+        else
+          charge
       }
-      if (noCap > 20.00) BigDecimal(20) else noCap
-    }
+      else if (foodIncluded)
+        itemsPrice * 0.10
+      else
+        BigDecimal(0)
+    // The maximum value of service charge is added only to bill with the hot food included as this is explicitly mentioned in the point 3
+    // to add maxValue for the all types of food implementation would be different:
+    //    val serviceCharge = {
+    //      val noCap = {
+    //        if (hotFoodIncluded) itemsPrice * 0.20
+    //        else if (foodIncluded) itemsPrice * 0.10
+    //        else BigDecimal(0)
+    //      }
+    //      if (noCap > 20.00) BigDecimal(20) else noCap
+    //    }
 
     (itemsPrice + serviceCharge).setScale(2, RoundingMode.HALF_UP)
 

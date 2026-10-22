@@ -22,7 +22,7 @@ class CafeSpec extends AnyWordSpec with Matchers {
     "apply 20% of service charge for hot food" in {
       Cafe.totalBill(List(SteakSandwich)) shouldBe 5.4
     }
-    "max service charge is £20.00" in {
+    "max service charge is £20.00 for the hot food" in {
       Cafe.totalBill(List.fill(40)(SteakSandwich)) shouldBe 200
     }
   }
