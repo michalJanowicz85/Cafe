@@ -1,3 +1,4 @@
+import scala.math.BigDecimal.RoundingMode
 //CafeX - Basic Exercise (Approximately 1 Hour)
 //Rules:
 //• Use Scala
@@ -51,8 +52,34 @@ case object SteakSandwich extends Food {
   override def isHot: Boolean = true
 }
 
+case object TestCaseFood extends Food {
+  override val price: BigDecimal = BigDecimal("1.999")
+  override val isHot: Boolean = true
+} // only to test total bill (rounded to 2 decimal places) scenario
+
 
 object Cafe {
 
-  def totalBill(items: List[CafeItem]): BigDecimal = items.map(_.price).sum
+  def totalBill(items: List[CafeItem]): BigDecimal = {
+    val itemsPrice = items.map(_.price).sum
+
+    val foodIncluded: Boolean = items.exists(_.isInstanceOf[Food])
+    val hotFoodIncluded: Boolean =
+      items.exists {
+        case food: Food => food.isHot
+        case _ => false
+      }
+
+    val serviceCharge = {
+      val noCap = {
+        if (hotFoodIncluded) itemsPrice * 0.20
+        else if (foodIncluded) itemsPrice * 0.10
+        else BigDecimal(0)
+      }
+      if (noCap > 20.00) BigDecimal(20) else noCap
+    }
+
+    (itemsPrice + serviceCharge).setScale(2, RoundingMode.HALF_UP)
+
+  }
 }
